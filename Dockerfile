@@ -1,10 +1,10 @@
 FROM python:3.9-slim
 
-WORKDIR /app
+ADD api.log /api.log
+ADD requirement.txt /requirement.txt
+ADD app.py /app.py
 
-COPY requirements.txt requirements.txt
-RUN pip install --no-cache-dir -r requirements.txt
-COPY . .
+RUN pip install -r requirement.txt
 EXPOSE 5000
 
 ENV FLASK_APP=app.py

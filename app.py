@@ -84,7 +84,7 @@ def create_account():
     try:
         if session.query(User).filter_by(username=username).first():
             logging.error('Username already exists: %s', username)
-            return jsonify({'success': False, 'reason': 'Username already exists'}), 400
+            return jsonify({'success': False, 'reason': 'Username already exists.'}), 400
 
         new_user = User(username=username, password=password)
         session.add(new_user)
@@ -120,14 +120,14 @@ def verify_account():
         user = session.query(User).filter_by(username=username).first()
         if not user:
             logging.warning('Username does not exist: %s', username)
-            return jsonify({'success': False, 'reason': 'Username does not exist'}), 404
+            return jsonify({'success': False, 'reason': 'Username does not exist.'}), 404
 
         if username in attempts:
             attempt_info = attempts[username]
             if attempt_info['count'] >= 5:
                 if datetime.now() < attempts[username]['time']:
                     logging.warning('Too many failed attempts for username: %s, failed times: %d', username, attempt_info['count'])
-                    return jsonify({'success': False, 'reason': 'Too many failed attempts, try again later'}), 429
+                    return jsonify({'success': False, 'reason': 'Too many failed attempts, try again later.'}), 429
 
         if user.password == password:
             if username in attempts:
@@ -140,7 +140,7 @@ def verify_account():
             attempts[username]['count'] += 1
             attempts[username]['time'] = datetime.now() + lockout_time
             logging.warning('Invalid password for username: %s, failed times: %d', username, attempts[username]['count'])
-            return jsonify({'success': False, 'reason': 'Invalid password'}), 401
+            return jsonify({'success': False, 'reason': 'Invalid password.'}), 401
     except Exception as e:
         logging.error('Error when verifying account: %s', str(e))
         return jsonify({'success': False, 'reason': str(e)}), 500
